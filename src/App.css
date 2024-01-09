@@ -4,3 +4,11 @@
   padding: 2rem;
   text-align: center;
 }
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
