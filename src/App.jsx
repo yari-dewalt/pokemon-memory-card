@@ -38,9 +38,8 @@ function App() {
     let id = Math.floor(Math.random() * (MAX_POKEMON_ID - 1)) + 1;
     const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`, {mode: "cors"});
     const pokemonData = await pokemon.json();
-    let pokemonName = pokemonData.name;
+    let pokemonName = pokemonData.name[0].toUpperCase() + pokemonData.name.substring(1);
     let pokemonImg = pokemonData.sprites.front_default;
-    // TODO: Capitalize name of pokemon
     // TODO: Make sure there are no duplicates
     // TODO: Fix pokemon not having image
     if (!pokemonImg)
@@ -94,9 +93,10 @@ function App() {
     return shuffled;
   };
 
-  function startGame() {
+  async function startGame() {
+    await generateData(6);
+    // TODO: Create loading screen
     setGameStarted(true);
-    generateData(6);
   }
 
   return (
