@@ -5,7 +5,12 @@ import Card from "./components/Card.jsx";
 
 function App() {
   const MAX_POKEMON_ID = 1025;
+  const STARTING_NUM_OF_CARDS = 6;
   const [gameStarted, setGameStarted] = useState(false);
+  const [gameEnded, setGameEnded] = useState(false);
+  const [gameContinued, setGameContinued] = useState(false);
+  const [numCards, setNumCards] = useState(STARTING_NUM_OF_CARDS);
+  const [won, setWon] = useState(false);
   const [loading, setLoading] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
@@ -15,15 +20,15 @@ function App() {
     handleIncreaseHighScore();
   }, [currentScore]);
 
+  useEffect(() => {
+    if (data.length > 0)
+      checkWin();
+  }, [data]);
+
+
   function handleIncreaseCurrentScore() {
     const newCurrentScore = currentScore + 1;
-    if (newCurrentScore === data.length) {
-      setGameStarted(false);
-      setCurrentScore(0);
-    }
-
-    else
-      setCurrentScore(newCurrentScore);
+    setCurrentScore(newCurrentScore);
   };
 
   function handleIncreaseHighScore() {
@@ -34,6 +39,20 @@ function App() {
       return prevHighScore;
     });
   };
+
+  function handleIncreaseNumCards() {
+    setNumCards((prev) => prev + 1);
+  }
+
+  function checkWin() {
+    if (data.every((i) => i.chosen == true)) {
+      console.log("test");
+      setGameStarted(false);
+      setGameEnded(true);
+      setWon(true);
+      handleIncreaseNumCards();
+    }
+  }
 
   async function fetchPokemon() {
     try {
@@ -52,27 +71,27 @@ function App() {
     }
   };
 
-async function generateData(count) {
-  let data = [];
-  const uniquePokemonNames = new Set();
+  async function generateData(count) {
+    let data = [];
+    const uniquePokemonNames = new Set();
 
-  while (data.length < count) {
-    const pokemon = await fetchPokemon();
+    while (data.length < count) {
+      const pokemon = await fetchPokemon();
 
-    if (!uniquePokemonNames.has(pokemon.pokemonName)) {
-      uniquePokemonNames.add(pokemon.pokemonName);
-      data.push(pokemon);
+      if (!uniquePokemonNames.has(pokemon.pokemonName)) {
+        uniquePokemonNames.add(pokemon.pokemonName);
+        data.push(pokemon);
+      }
     }
+
+    data = data.map((pokemon) => ({
+      ...pokemon,
+      key: uniqid(),
+      chosen: false,
+    }));
+
+    setData(data);
   }
-
-  data = data.map((pokemon) => ({
-    ...pokemon,
-    key: uniqid(),
-    chosen: false,
-  }));
-
-  setData(data);
-}
 
   function chooseCard(e) {
     let updatedData = data.map((pokemon) => {
@@ -80,6 +99,7 @@ async function generateData(count) {
         if (pokemon.chosen) {
           console.log("Already chosen!");
           setGameStarted(false);
+          setGameEnded(true);
           setCurrentScore(0);
           return pokemon;
         }
@@ -96,6 +116,7 @@ async function generateData(count) {
     updatedData = shuffleData(updatedData);
 
     setData(updatedData);
+    checkWin()
   };
 
   function shuffleData(data) {
@@ -108,17 +129,30 @@ async function generateData(count) {
   };
 
   async function startGame() {
+    setGameEnded(false);
     setLoading(true);
-    await generateData(6);
+    await generateData(STARTING_NUM_OF_CARDS);
     setLoading(false);
-    // TODO: Create loading screen
+    setGameStarted(true);
+  }
+
+  async function continueGame() {
+    setGameEnded(false);
+    setWon(false);
+    setLoading(true);
+    setGameContinued(true);
+    await generateData(numCards);
+    setLoading(false);
     setGameStarted(true);
   }
 
   return (
     <>
       {loading && <h1>Loading...</h1>}
-      {(!gameStarted && !loading) && <button onClick={() => startGame()}>Start Game</button>}
+      {won && <h1>You Won!</h1>}
+      {won && <button onClick={continueGame}>Continue Game</button>}
+      {(gameEnded && !won) && <h1>Game Over!</h1>}
+      {(!gameStarted && !loading && !won) && <button onClick={() => startGame()}>Start Game</button>}
       {gameStarted &&
         <div className="score-container">
           <h3>{currentScore}</h3>
