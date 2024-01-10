@@ -35,17 +35,21 @@ function App() {
   };
 
   async function fetchPokemon() {
-    let id = Math.floor(Math.random() * (MAX_POKEMON_ID - 1)) + 1;
-    const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`, {mode: "cors"});
-    const pokemonData = await pokemon.json();
-    let pokemonName = pokemonData.name[0].toUpperCase() + pokemonData.name.substring(1);
-    let pokemonImg = pokemonData.sprites.front_default;
-    // TODO: Make sure there are no duplicates
-    // TODO: Fix pokemon not having image
-    if (!pokemonImg)
-      fetchPokemon();
+    try {
+      let id = Math.floor(Math.random() * (MAX_POKEMON_ID - 1)) + 1;
+      const pokemon = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}/`, {mode: "cors"});
+      const pokemonData = await pokemon.json();
+      let pokemonName = pokemonData.name[0].toUpperCase() + pokemonData.name.substring(1);
+      let pokemonImg = pokemonData.sprites.front_default;
+      // TODO: Make sure there are no duplicates
+      if (!pokemonImg)
+        return fetchPokemon();
 
-    return { pokemonName, pokemonImg };
+      return { pokemonName, pokemonImg };
+    } catch (error) {
+      console.error("Error fetching Pokemon:", error);
+      return fetchPokemon();
+    }
   };
 
   async function generateData(count) {
