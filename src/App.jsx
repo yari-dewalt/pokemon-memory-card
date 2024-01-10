@@ -6,6 +6,7 @@ import Card from "./components/Card.jsx";
 function App() {
   const MAX_POKEMON_ID = 1025;
   const [gameStarted, setGameStarted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [data, setData] = useState([]);
@@ -41,7 +42,6 @@ function App() {
       const pokemonData = await pokemon.json();
       let pokemonName = pokemonData.name[0].toUpperCase() + pokemonData.name.substring(1);
       let pokemonImg = pokemonData.sprites.front_default;
-      // TODO: Make sure there are no duplicates
       if (!pokemonImg)
         return fetchPokemon();
 
@@ -52,17 +52,27 @@ function App() {
     }
   };
 
-  async function generateData(count) {
-    const promises = Array.from({ length: count }, () => fetchPokemon());
-    const data = await Promise.all(promises);
+async function generateData(count) {
+  let data = [];
+  const uniquePokemonNames = new Set();
 
-    data.forEach((i) => {
-      i.key = uniqid();
-      i.chosen = false;
-    });
+  while (data.length < count) {
+    const pokemon = await fetchPokemon();
 
-    setData(data);
-  };
+    if (!uniquePokemonNames.has(pokemon.pokemonName)) {
+      uniquePokemonNames.add(pokemon.pokemonName);
+      data.push(pokemon);
+    }
+  }
+
+  data = data.map((pokemon) => ({
+    ...pokemon,
+    key: uniqid(),
+    chosen: false,
+  }));
+
+  setData(data);
+}
 
   function chooseCard(e) {
     let updatedData = data.map((pokemon) => {
@@ -98,14 +108,17 @@ function App() {
   };
 
   async function startGame() {
+    setLoading(true);
     await generateData(6);
+    setLoading(false);
     // TODO: Create loading screen
     setGameStarted(true);
   }
 
   return (
     <>
-      {!gameStarted && <button onClick={() => startGame()}>Start Game</button>}
+      {loading && <h1>Loading...</h1>}
+      {(!gameStarted && !loading) && <button onClick={() => startGame()}>Start Game</button>}
       {gameStarted &&
         <div className="score-container">
           <h3>{currentScore}</h3>
