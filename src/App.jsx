@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import uniqid from 'uniqid';
 import './App.css'
 import Card from "./components/Card.jsx";
+import ScoreTracker from "./components/ScoreTracker.jsx";
 
 function App() {
   const MAX_POKEMON_ID = 1025;
@@ -153,12 +154,7 @@ function App() {
       {won && <button onClick={continueGame}>Continue Game</button>}
       {(gameEnded && !won) && <h1>Game Over!</h1>}
       {(!gameStarted && !loading && !won) && <button onClick={() => startGame()}>Start Game</button>}
-      {gameStarted &&
-        <div className="score-container">
-          <h3>{currentScore}</h3>
-          <h3>{highScore}</h3>
-        </div>
-      }
+      {gameStarted && <ScoreTracker currentScore={currentScore} highScore={highScore}/>}
       {gameStarted &&
         <div className="card-container">
           {data.map((pokemonData) => (
