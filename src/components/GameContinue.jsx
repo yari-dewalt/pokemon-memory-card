@@ -5,7 +5,7 @@ function GameContinue({currentScore, continueGame, startGame })
   return (
     <Modal
       headerText={"You Won!"}
-      description={`Your current score is ${currentScore}. Would you like to continue?`}
+      description={<div>Your current score is <span className="score">{currentScore}</span>. Would you like to continue?</div>}
       buttons={[
                <button key="continue" onClick={continueGame}>Continue Game</button>,
                <button key="restart" onClick={startGame}>Restart Game</button>
