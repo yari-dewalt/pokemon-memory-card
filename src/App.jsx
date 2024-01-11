@@ -3,6 +3,7 @@ import uniqid from 'uniqid';
 import './App.css'
 import Card from "./components/Card.jsx";
 import ScoreTracker from "./components/ScoreTracker.jsx";
+import Modal from "./components/Modal.jsx";
 
 function App() {
   const MAX_POKEMON_ID = 1025;
@@ -156,8 +157,10 @@ function App() {
   return (
     <>
       {loading && <h1>Loading...</h1>}
-      {won && <h1>You Won!</h1>}
-      {won && <button onClick={continueGame}>Continue Game</button>}
+      {won && <Modal
+               headerText={"You Won!"}
+               description={`Your final score is ${currentScore}`}
+               buttons={<button key="continue" onClick={continueGame}>Continue Game</button>}/>}
       {(gameEnded && !won) && <h1>Game Over!</h1>}
       {(!gameStarted && !loading && !won) && <button onClick={() => startGame()}>Start Game</button>}
       {gameStarted && <ScoreTracker currentScore={currentScore} highScore={highScore}/>}
