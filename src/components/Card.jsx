@@ -9,7 +9,7 @@ function Card({ pokemonData, onClick, isAnyCardClicked }) {
       onClick={onClick}
     >
       <div className={`card-content ${isAnyCardClicked ? "animate" : ""}`}>
-        <img className={"card-image"} src={pokemonData.pokemonImg} alt={pokemonData.pokemonName} />
+        <img className={"card-image"} src={pokemonData.pokemonImg} alt={pokemonData.pokemonName} draggable="false"/>
         <h2 className={"card-name"}>{pokemonData.pokemonName}</h2>
       </div>
     </div>
