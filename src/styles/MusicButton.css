@@ -1,0 +1,15 @@
+.music-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  border-radius: 50%;
+  width: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.music-button:hover {
+  background-color: rgb(200, 200, 200);
+  border: solid 2px black;
+}
