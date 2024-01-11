@@ -16,6 +16,7 @@ function App() {
   const [currentScore, setCurrentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
   const [data, setData] = useState([]);
+  const [isAnyCardClicked, setIsAnyCardClicked] = useState(false);
 
   useEffect(() => {
     handleIncreaseHighScore();
@@ -95,6 +96,7 @@ function App() {
   }
 
   function chooseCard(e) {
+    setIsAnyCardClicked(true);
     let updatedData = data.map((pokemon) => {
       if (pokemon.key === e.currentTarget.id) {
         if (pokemon.chosen) {
@@ -117,7 +119,11 @@ function App() {
     updatedData = shuffleData(updatedData);
 
     setData(updatedData);
-    checkWin()
+
+    checkWin();
+    setTimeout(() => {
+      setIsAnyCardClicked(false);
+    }, 1000);
   };
 
   function shuffleData(data) {
@@ -158,7 +164,7 @@ function App() {
       {gameStarted &&
         <div className="card-container">
           {data.map((pokemonData) => (
-            <Card key={pokemonData.key} pokemonData={pokemonData} onClick={chooseCard}/>
+            <Card key={pokemonData.key} pokemonData={pokemonData} onClick={chooseCard} isAnyCardClicked={isAnyCardClicked}/>
           ))}
         </div>
       }
