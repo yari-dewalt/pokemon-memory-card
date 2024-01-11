@@ -1,8 +1,7 @@
 .score-tracker {
-  margin: 5% 0;
+  margin: 5% 0 2% 0;
   display: flex;
   gap: 2rem;
-  top: 10%;
   text-shadow:
     1px 1px 0 black,
     -1px 1px 0 black,
