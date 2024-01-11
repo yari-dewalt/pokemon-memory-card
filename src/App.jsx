@@ -5,6 +5,7 @@ import Card from "./components/Card.jsx";
 import ScoreTracker from "./components/ScoreTracker.jsx";
 import GameStart from "./components/GameStart.jsx";
 import GameContinue from "./components/GameContinue.jsx";
+import GameEnd from "./components/GameEnd.jsx";
 
 function App() {
   const MAX_POKEMON_ID = 1025;
@@ -105,7 +106,6 @@ function App() {
           console.log("Already chosen!");
           setGameStarted(false);
           setGameEnded(true);
-          setCurrentScore(0);
           return pokemon;
         }
 
@@ -162,8 +162,8 @@ function App() {
     <>
       {loading && <h1>Loading...</h1>}
       {won && <GameContinue currentScore={currentScore} continueGame={continueGame} startGame={startGame}/>}
-      {(gameEnded && !won) && <h1>Game Over!</h1>}
-      {(!gameStarted && !loading && !won) && <GameStart startGame={startGame}/>}
+      {(gameEnded && !won) && <GameEnd currentScore={currentScore} startGame={startGame}/>}
+      {(!gameStarted && !loading && !won && !gameEnded) && <GameStart startGame={startGame}/>}
       {gameStarted && <ScoreTracker currentScore={currentScore} highScore={highScore}/>}
       {gameStarted &&
         <div className="card-container">
