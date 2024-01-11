@@ -1,0 +1,16 @@
+.overlay {
+  width: 100vw;
+  height: 100vh;
+  background-color: rgb(0, 0, 0, 0.4);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  background-color: blue;
+}
