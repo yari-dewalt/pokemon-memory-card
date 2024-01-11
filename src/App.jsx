@@ -3,7 +3,7 @@ import uniqid from 'uniqid';
 import './App.css'
 import Card from "./components/Card.jsx";
 import ScoreTracker from "./components/ScoreTracker.jsx";
-import Modal from "./components/Modal.jsx";
+import GameStart from "./components/GameStart.jsx";
 import GameContinue from "./components/GameContinue.jsx";
 
 function App() {
@@ -141,6 +141,7 @@ function App() {
     setGameEnded(false);
     setLoading(true);
     setWon(false);
+    setCurrentScore(0);
     setNumCards(STARTING_NUM_OF_CARDS);
     await generateData(STARTING_NUM_OF_CARDS);
     setLoading(false);
@@ -162,7 +163,7 @@ function App() {
       {loading && <h1>Loading...</h1>}
       {won && <GameContinue currentScore={currentScore} continueGame={continueGame} startGame={startGame}/>}
       {(gameEnded && !won) && <h1>Game Over!</h1>}
-      {(!gameStarted && !loading && !won) && <button onClick={() => startGame()}>Start Game</button>}
+      {(!gameStarted && !loading && !won) && <GameStart startGame={startGame}/>}
       {gameStarted && <ScoreTracker currentScore={currentScore} highScore={highScore}/>}
       {gameStarted &&
         <div className="card-container">
