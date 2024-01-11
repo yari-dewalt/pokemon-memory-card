@@ -6,6 +6,12 @@ import ScoreTracker from "./components/ScoreTracker.jsx";
 import GameStart from "./components/GameStart.jsx";
 import GameContinue from "./components/GameContinue.jsx";
 import GameEnd from "./components/GameEnd.jsx";
+import MusicButton from "./components/MusicButton.jsx";
+import music from "./assets/background_music.mp3";
+
+const audio = new Audio(music);
+audio.volume = 0.2;
+audio.loop = true;
 
 function App() {
   const MAX_POKEMON_ID = 1025;
@@ -20,6 +26,7 @@ function App() {
   const [highScore, setHighScore] = useState(0);
   const [data, setData] = useState([]);
   const [isAnyCardClicked, setIsAnyCardClicked] = useState(false);
+  const [musicOn, setMusicOn] = useState(false);
 
   useEffect(() => {
     const savedHighScore = JSON.parse(localStorage.getItem("highScore"));
@@ -36,6 +43,18 @@ function App() {
       checkWin();
   }, [data]);
 
+  useEffect(() => {
+    if (musicOn)
+      audio.play();
+    else
+      audio.pause();
+  }, [musicOn])
+
+  function handleMusic() {
+    setMusicOn((prevMusicOn) => !prevMusicOn);
+    if (musicOn)
+      audio.play();
+  }
 
   function handleIncreaseCurrentScore() {
     const newCurrentScore = currentScore + 1;
@@ -59,7 +78,6 @@ function App() {
 
   function checkWin() {
     if (data.every((i) => i.chosen == true)) {
-      console.log("test");
       setGameStarted(false);
       setGameEnded(true);
       setWon(true);
@@ -111,7 +129,6 @@ function App() {
     let updatedData = data.map((pokemon) => {
       if (pokemon.key === e.currentTarget.id) {
         if (pokemon.chosen) {
-          console.log("Already chosen!");
           setGameStarted(false);
           setGameEnded(true);
           return pokemon;
@@ -141,7 +158,6 @@ function App() {
         .sort((a, b) => a.sort - b.sort)
         .map(({ value }) => value);
 
-    console.table(shuffled);
     return shuffled;
   };
 
@@ -168,6 +184,7 @@ function App() {
 
   return (
     <>
+      <MusicButton musicOn={musicOn} onClick={handleMusic}/>
       {loading && <h1 style={{fontSize: "2rem", position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>Loading...</h1>}
       {won && <GameContinue currentScore={currentScore} continueGame={continueGame} startGame={startGame}/>}
       {(gameEnded && !won) && <GameEnd currentScore={currentScore} startGame={startGame}/>}
