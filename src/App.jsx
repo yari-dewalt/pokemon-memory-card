@@ -139,6 +139,7 @@ function App() {
   async function startGame() {
     setGameEnded(false);
     setLoading(true);
+    setNumCards(STARTING_NUM_OF_CARDS);
     await generateData(STARTING_NUM_OF_CARDS);
     setLoading(false);
     setGameStarted(true);
