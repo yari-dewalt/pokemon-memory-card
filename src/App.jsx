@@ -21,7 +21,11 @@ function App() {
   const [data, setData] = useState([]);
   const [isAnyCardClicked, setIsAnyCardClicked] = useState(false);
 
-  // TODO: Local storage for high score
+  useEffect(() => {
+    const savedHighScore = JSON.parse(localStorage.getItem("highScore"));
+    if (savedHighScore)
+      setHighScore(savedHighScore);
+  }, []);
 
   useEffect(() => {
     handleIncreaseHighScore();
@@ -40,8 +44,10 @@ function App() {
 
   function handleIncreaseHighScore() {
     setHighScore((prevHighScore) => {
-      if (currentScore > prevHighScore)
+      if (currentScore > prevHighScore) {
+        localStorage.setItem("highScore", JSON.stringify(currentScore));
         return currentScore;
+      }
 
       return prevHighScore;
     });
@@ -162,7 +168,7 @@ function App() {
 
   return (
     <>
-      {loading && <h1 style={{position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>Loading...</h1>}
+      {loading && <h1 style={{fontSize: "2rem", position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>Loading...</h1>}
       {won && <GameContinue currentScore={currentScore} continueGame={continueGame} startGame={startGame}/>}
       {(gameEnded && !won) && <GameEnd currentScore={currentScore} startGame={startGame}/>}
       {(!gameStarted && !loading && !won && !gameEnded) && <GameStart startGame={startGame}/>}
