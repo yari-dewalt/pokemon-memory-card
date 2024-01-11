@@ -6,7 +6,7 @@ function Card({ pokemonData, onClick, isAnyCardClicked }) {
     <div
       className={"card"}
       id={pokemonData.key}
-      onClick={onClick}
+      onClick={!isAnyCardClicked ? onClick : undefined}
     >
       <div className={`card-content ${isAnyCardClicked ? "animate" : ""}`}>
         <img className={"card-image"} src={pokemonData.pokemonImg} alt={pokemonData.pokemonName} draggable="false"/>
