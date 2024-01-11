@@ -1,4 +1,25 @@
 .score-tracker {
+  margin: 5% 0;
   display: flex;
   gap: 2rem;
+  top: 10%;
+  text-shadow:
+    1px 1px 0 black,
+    -1px 1px 0 black,
+    -1px -1px 0 black,
+    1px -1px 0 black;
+}
+
+.high-score-container {
+  display: flex;
+  align-items: center;
+}
+
+#trophy {
+  width: 30px;
+  margin-right: 10px;
+}
+
+#high-score {
+  color: gold;
 }
