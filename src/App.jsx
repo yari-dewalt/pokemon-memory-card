@@ -4,6 +4,7 @@ import './App.css'
 import Card from "./components/Card.jsx";
 import ScoreTracker from "./components/ScoreTracker.jsx";
 import Modal from "./components/Modal.jsx";
+import GameContinue from "./components/GameContinue.jsx";
 
 function App() {
   const MAX_POKEMON_ID = 1025;
@@ -124,7 +125,7 @@ function App() {
     checkWin();
     setTimeout(() => {
       setIsAnyCardClicked(false);
-    }, 1000);
+    }, 800);
   };
 
   function shuffleData(data) {
@@ -139,6 +140,7 @@ function App() {
   async function startGame() {
     setGameEnded(false);
     setLoading(true);
+    setWon(false);
     setNumCards(STARTING_NUM_OF_CARDS);
     await generateData(STARTING_NUM_OF_CARDS);
     setLoading(false);
@@ -158,10 +160,7 @@ function App() {
   return (
     <>
       {loading && <h1>Loading...</h1>}
-      {won && <Modal
-               headerText={"You Won!"}
-               description={`Your final score is ${currentScore}`}
-               buttons={<button key="continue" onClick={continueGame}>Continue Game</button>}/>}
+      {won && <GameContinue currentScore={currentScore} continueGame={continueGame} startGame={startGame}/>}
       {(gameEnded && !won) && <h1>Game Over!</h1>}
       {(!gameStarted && !loading && !won) && <button onClick={() => startGame()}>Start Game</button>}
       {gameStarted && <ScoreTracker currentScore={currentScore} highScore={highScore}/>}
