@@ -1,4 +1,5 @@
 .score-tracker {
+  color: white;
   margin: 5% 0 2% 0;
   display: flex;
   gap: 2rem;

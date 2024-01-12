@@ -185,7 +185,7 @@ function App() {
   return (
     <>
       <MusicButton musicOn={musicOn} onClick={handleMusic}/>
-      {loading && <h1 style={{fontSize: "2rem", position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>Loading...</h1>}
+      {loading && <h1 style={{color: "white", fontSize: "2rem", position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)"}}>Loading...</h1>}
       {won && <GameContinue currentScore={currentScore} continueGame={continueGame} startGame={startGame}/>}
       {(gameEnded && !won) && <GameEnd currentScore={currentScore} startGame={startGame}/>}
       {(!gameStarted && !loading && !won && !gameEnded) && <GameStart startGame={startGame}/>}
